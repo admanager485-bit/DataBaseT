@@ -1,0 +1,22 @@
+[
+  { "brand": "Yasaka", "name": "Ma Lin Extra Offensive", "handles": ["FL", "ST", "CS"], "type": "All-Wood 5-Ply Hard Outer", "weight": 88, "speed": 88, "control": 88, "price": 55 },
+  { "brand": "Yasaka", "name": "Ma Lin Carbon", "handles": ["FL", "ST", "CS"], "type": "Outer Carbon Composite", "weight": 85, "speed": 92, "control": 86, "price": 75 },
+  { "brand": "Yasaka", "name": "Ma Lin Soft Carbon", "handles": ["FL", "ST", "CS"], "type": "Inner Soft Carbon Composite", "weight": 84, "speed": 87, "control": 90, "price": 75 },
+  { "brand": "Yasaka", "name": "Ma Lin Extra Special", "handles": ["FL", "ST", "CS"], "type": "All-Wood 7-Ply Power OFF", "weight": 90, "speed": 91, "control": 85, "price": 65 },
+  { "brand": "Yasaka", "name": "Ma Lin Max Carbon", "handles": ["FL", "ST", "CS"], "type": "7-Ply Wood + 2 Carbon Max Speed", "weight": 92, "speed": 96, "control": 81, "price": 85 },
+  { "brand": "Yasaka", "name": "Sweden Extra", "handles": ["FL", "ST", "CS"], "type": "All-Wood 5-Ply Classic Control", "weight": 84, "speed": 78, "control": 95, "price": 45 },
+  { "brand": "Yasaka", "name": "Sweden Classic", "handles": ["FL", "ST", "CS"], "type": "All-Wood 5-Ply Pure Touch", "weight": 80, "speed": 72, "control": 98, "price": 42 },
+  { "brand": "Yasaka", "name": "Sweden Defensive", "handles": ["FL", "ST"], "type": "All-Wood 5-Ply Defensive Control", "weight": 82, "speed": 62, "control": 99, "price": 45 },
+  { "brand": "Yasaka", "name": "Sweden Guardian", "handles": ["FL", "ST"], "type": "All-Wood 5-Ply Heavy Defensive", "weight": 88, "speed": 60, "control": 100, "price": 50 },
+  { "brand": "Yasaka", "name": "Falck Carbon", "handles": ["FL", "ST", "CS"], "type": "Premium Japanese Carbon", "weight": 87, "speed": 95, "control": 85, "price": 140 },
+  { "brand": "Yasaka", "name": "Falck OFF", "handles": ["FL", "ST", "CS"], "type": "All-Wood 7-Ply Offensive", "weight": 88, "speed": 89, "control": 88, "price": 65 },
+  { "brand": "Yasaka", "name": "Falck W7", "handles": ["FL", "ST", "CS"], "type": "All-Wood 7-Ply Swedish Touch", "weight": 90, "speed": 87, "control": 89, "price": 60 },
+  { "brand": "Yasaka", "name": "Atletico Power", "handles": ["FL", "ST", "CS"], "type": "Inner Carbon Power OFF", "weight": 88, "speed": 94, "control": 87, "price": 130 },
+  { "brand": "Yasaka", "name": "Atletico Balance", "handles": ["FL", "ST", "CS"], "type": "Inner Carbon Allround OFF", "weight": 86, "speed": 90, "control": 91, "price": 130 },
+  { "brand": "Yasaka", "name": "Atletico Spin", "handles": ["FL", "ST", "CS"], "type": "Inner Carbon Spin-Oriented", "weight": 85, "speed": 88, "control": 93, "price": 130 },
+  { "brand": "Yasaka", "name": "Reinforce AC", "handles": ["FL", "ST", "CS"], "type": "Flexible Aramid Carbon", "weight": 85, "speed": 89, "control": 92, "price": 85 },
+  { "brand": "Yasaka", "name": "Reinforce SI", "handles": ["FL", "ST", "CS"], "type": "Inner Sync Fiber Soft Touch", "weight": 83, "speed": 85, "control": 94, "price": 85 },
+  { "brand": "Yasaka", "name": "Galaxya", "handles": ["FL", "ST", "CS"], "type": "All-Wood 7-Ply Fast Offensive", "weight": 92, "speed": 92, "control": 84, "price": 70 },
+  { "brand": "Yasaka", "name": "Galaxya Carbon", "handles": ["FL", "ST", "CS"], "type": "7-Ply Wood + 2 Carbon Power", "weight": 90, "speed": 97, "control": 80, "price": 90 },
+  { "brand": "Yasaka", "name": "Silver Line Carbon", "handles": ["FL", "ST", "CS"], "type": "Hard Wood + Inner Carbon", "weight": 87, "speed": 93, "control": 86, "price": 80 }
+]

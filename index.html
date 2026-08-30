@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TT Custom Racket Studio & Comparator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">🏓 TT Racket Studio</div>
+    <button id="compareBtn" class="btn btn-compare">+ Compare Second Racket</button>
+  </header>
+
+  <main class="container">
+
+    <!-- SIDE-BY-SIDE COMPARISON SUMMARY (ACTIVE ONLY IN COMPARE MODE) -->
+    <section id="comparisonSummaryBox" class="comparison-summary hidden">
+      <h2>⚡ Direct Comparison Breakdown</h2>
+      <div id="comparisonMetricsGrid" class="comp-grid"></div>
+    </section>
+
+    <div id="racketGrid" class="racket-grid single-mode">
+      
+      <!-- RACKET SETUP 1 -->
+      <section class="racket-card" id="card-r1">
+        <h2 class="card-title">Racket Setup #1</h2>
+        
+        <div class="form-group">
+          <label for="r1-blade">Blade Choice</label>
+          <select id="r1-blade" class="custom-select"></select>
+        </div>
+
+        <div class="form-group">
+          <label for="r1-handle">Blade Handle Type</label>
+          <select id="r1-handle" class="custom-select"></select>
+        </div>
+
+        <div class="form-group">
+          <label for="r1-fh">Forehand Rubber (FH)</label>
+          <select id="r1-fh" class="custom-select"></select>
+        </div>
+
+        <div class="form-group">
+          <label for="r1-bh">Backhand Rubber (BH)</label>
+          <select id="r1-bh" class="custom-select"></select>
+        </div>
+
+        <!-- PRO MATCHES -->
+        <div class="pro-box">
+          <span class="pro-title">🏆 Similar Pro Equipment Matches:</span>
+          <div id="r1-pros" class="pro-tags"></div>
+        </div>
+
+        <!-- SUMMARY PANEL -->
+        <div class="summary-box">
+          <h3>Racket #1 Summary</h3>
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <span class="m-label">Total Price</span>
+              <span class="m-value price-text" id="r1-price">$0</span>
+            </div>
+            <div class="metric-card">
+              <span class="m-label">Est. Weight</span>
+              <span class="m-value" id="r1-weight">0g</span>
+            </div>
+            <div class="metric-card">
+              <span class="m-label">Speed / Power Rating</span>
+              <span class="m-value" id="r1-speed">0 / 100</span>
+            </div>
+            <div class="metric-card">
+              <span class="m-label">Control Rating</span>
+              <span class="m-value" id="r1-control">0 / 100</span>
+            </div>
+            <div class="metric-card">
+              <span class="m-label">Spin Rating</span>
+              <span class="m-value" id="r1-spin">0 / 100</span>
+            </div>
+            <div class="metric-card">
+              <span class="m-label">FH / BH Hardness</span>
+              <span class="m-value hardness-text" id="r1-hardness">- / -</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RACKET SETUP 2 -->
+      <section class="racket-card hidden" id="card-r2">
+        <h2 class="card-title">Racket Setup #2 (Comparison)</h2>
+        
+        <div class="form-group">
+          <label for="r2-blade">Blade Choice</label>
+          <select id="r2-blade" class="custom-select"></select>
+        </div>
+
+        <div class="form-group">
+          <label for="r2-handle">Blade Handle Type</label>
+          <select id="r2-handle" class="custom-select"></select>
+        </div>
+
+        <div class="form-group">
+          <label for="r2-fh">Forehand Rubber (FH)</label>
+          <select id="r2-fh" class="custom-select"></select>
+        </div>
+
+        <div class="form-group">
+          <label for="r2-bh">Backhand Rubber (BH)</label>
+          <select id="r2-bh" class="custom-select"></select>
+        </div>
+
+        <!-- PRO MATCHES -->
+        <div class="pro-box">
+          <span class="pro-title">🏆 Similar Pro Equipment Matches:</span>
+          <div id="r2-pros" class="pro-tags"></div>
+        </div>
+
+        <!-- SUMMARY PANEL -->
+        <div class="summary-box">
+          <h3>Racket #2 Summary</h3>
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <span class="m-label">Total Price</span>
+              <span class="m-value price-text" id="r2-price">$0</span>
+            </div>
+            <div class="metric-card">
+              <span class="m-label">Est. Weight</span>
+              <span class="m-value" id="r2-weight">0g</span>
+            </div>
+            <div class="metric-card">
+              <span class="m-label">Speed / Power Rating</span>
+              <span class="m-value" id="r2-speed">0 / 100</span>
+            </div>
+            <div class="metric-card">
+              <span class="m-label">Control Rating</span>
+              <span class="m-value" id="r2-control">0 / 100</span>
+            </div>
+            <div class="metric-card">
+              <span class="m-label">Spin Rating</span>
+              <span class="m-value" id="r2-spin">0 / 100</span>
+            </div>
+            <div class="metric-card">
+              <span class="m-label">FH / BH Hardness</span>
+              <span class="m-value hardness-text" id="r2-hardness">- / -</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
