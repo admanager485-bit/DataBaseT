@@ -4,28 +4,305 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TT Racket Studio</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: #111827;
+      --input-bg: #1f2937;
+      --border-color: #374151;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent-blue: #38bdf8;
+      --accent-green: #34d399;
+      --accent-orange: #fb923c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding: 20px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .text-green { color: var(--accent-green); }
+    .text-orange { color: var(--accent-orange); }
+    .text-blue { color: var(--accent-blue); }
+
+    /* Widened container to support side-by-side layout */
+    .app-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      color: var(--text-main);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-primary, .btn-secondary, .btn-load {
+      background-color: var(--input-bg);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover, .btn-secondary:hover {
+      background-color: var(--border-color);
+    }
+
+    /* Flex container for side-by-side layout */
+    .racket-container {
+      display: flex;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .racket-card {
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      padding: 24px;
+      border: 1px solid var(--border-color);
+      flex: 1; /* Both cards share 50% width equally */
+      min-width: 0;
+    }
+
+    .racket-card h2 {
+      color: var(--accent-blue);
+      font-size: 1.25rem;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    select {
+      width: 100%;
+      background-color: var(--input-bg);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      appearance: none;
+      outline: none;
+    }
+
+    select:focus {
+      border-color: var(--accent-blue);
+    }
+
+    .pro-matches-box {
+      margin: 20px 0;
+      padding: 16px;
+      border: 1px dashed var(--border-color);
+      border-radius: 6px;
+      background-color: rgba(31, 41, 55, 0.5);
+    }
+
+    .pro-matches-box .box-title {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .pro-match-badge {
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+
+    .pro-match-badge span {
+      color: var(--text-muted);
+    }
+
+    .summary-box {
+      background-color: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .summary-box h3 {
+      font-size: 1rem;
+      margin-bottom: 16px;
+      color: var(--text-muted);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background-color: var(--card-bg);
+      padding: 12px;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .advanced-stats {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-color);
+      padding-top: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .alert-box {
+      padding: 12px;
+      border-radius: 6px;
+      margin: 10px 0;
+      font-size: 0.9rem;
+    }
+    .alert-mechanics { background: rgba(251, 146, 60, 0.1); border: 1px solid var(--accent-orange); color: var(--accent-orange); }
+    .alert-balance { background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #ef4444; }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 24px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .btn-close {
+      background: transparent;
+      color: var(--text-muted);
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .flagship-card {
+      background: var(--input-bg);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-title {
+      font-weight: bold;
+      color: var(--accent-blue);
+      margin-bottom: 8px;
+    }
+
+    .flagship-item {
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+    .item-tag { color: var(--text-muted); width: 80px; display: inline-block;}
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .racket-container {
+        flex-direction: column;
+      }
+      .header-actions {
+        width: 100%;
+        flex-direction: column;
+      }
+      .btn-primary, .btn-secondary {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Top Navigation Bar -->
-  <header class="app-header">
-    <div class="logo">
-      <span class="logo-icon">🏓</span>
+  <div class="app-container">
+    <header>
       <h1>TT Racket Studio</h1>
-    </div>
-    <div class="header-actions">
-      <button id="feelBtn" class="btn btn-secondary">🔍 Search Racket Feels</button>
-      <button id="compareBtn" class="btn btn-primary">+ Compare Second Racket</button>
-    </div>
-  </header>
+      <!-- Buttons moved here -->
+      <div class="header-actions">
+        <button id="compareBtn" class="btn-secondary">+ Compare Second Racket</button>
+        <button id="flagshipBtn" class="btn-primary">⭐ Load Flagship Setups</button>
+      </div>
+    </header>
 
-  <!-- Main Racket Workspace -->
-  <main class="container">
-    <div id="racketGrid" class="single-mode">
+    <!-- Racket Container uses Flexbox for side-by-side layout -->
+    <div class="racket-container">
       
-      <!-- RACKET SETUP #1 -->
-      <section id="card-r1" class="racket-card">
+      <!-- RACKET #1 -->
+      <div id="card-r1" class="racket-card">
         <h2>Racket Setup #1</h2>
         
         <div class="form-group">
@@ -48,73 +325,55 @@
           <select id="r1-bh"></select>
         </div>
 
-        <!-- Pro Equipment Matches -->
         <div class="pro-matches-box">
-          <span class="pro-label">🏆 Similar Pro Equipment Matches:</span>
-          <div id="r1-pros" class="pro-tags-container"></div>
+          <div class="box-title">🏆 Similar Pro Equipment Matches:</div>
+          <div id="r1-pro-matches" class="pro-matches-content"></div>
         </div>
 
-        <!-- Racket #1 Summary -->
-        <div class="summary-card">
+        <div id="r1-warnings" class="warnings-container hidden"></div>
+
+        <div class="summary-box">
           <h3>Racket #1 Summary</h3>
-          <div class="metrics-grid">
-            <div class="metric">
-              <span class="metric-label">TOTAL PRICE</span>
-              <span id="r1-price" class="metric-value text-green">$0</span>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-label">TOTAL PRICE</span>
+              <span id="r1-price" class="stat-value text-green"></span>
             </div>
-            <div class="metric">
-              <span class="metric-label">EST. WEIGHT</span>
-              <span id="r1-weight" class="metric-value">0g</span>
+            <div class="stat-card">
+              <span class="stat-label">EST. WEIGHT</span>
+              <span id="r1-weight" class="stat-value"></span>
             </div>
-            <div class="metric">
-              <span class="metric-label">HIGH-IMPACT POWER</span>
-              <span id="r1-speed-high" class="metric-value">0 / 100</span>
+            <div class="stat-card">
+              <span class="stat-label">SPEED / POWER RATING</span>
+              <span id="r1-speed" class="stat-value"></span>
             </div>
-            <div class="metric">
-              <span class="metric-label">LOW-IMPACT TOUCH</span>
-              <span id="r1-speed-low" class="metric-value">0 / 100</span>
+            <div class="stat-card">
+              <span class="stat-label">CONTROL RATING</span>
+              <span id="r1-control" class="stat-value"></span>
             </div>
-            <div class="metric">
-              <span class="metric-label">CONTROL RATING</span>
-              <span id="r1-control" class="metric-value">0 / 100</span>
+            <div class="stat-card">
+              <span class="stat-label">SPIN RATING</span>
+              <span id="r1-spin" class="stat-value"></span>
             </div>
-            <div class="metric">
-              <span class="metric-label">SPIN RATING</span>
-              <span id="r1-spin" class="metric-value">0 / 100</span>
-            </div>
-            <div class="metric">
-              <span class="metric-label">THROW ANGLE (1-5)</span>
-              <span id="r1-throw" class="metric-value">0 / 5.0</span>
-            </div>
-            <div class="metric">
-              <span class="metric-label">FH / BH HARDNESS</span>
-              <span id="r1-hardness" class="metric-value text-amber">- / -</span>
+            <div class="stat-card">
+              <span class="stat-label">FH / BH HARDNESS</span>
+              <span id="r1-hardness" class="stat-value text-orange"></span>
             </div>
           </div>
-
-          <!-- Dynamic Indicators -->
-          <div class="dynamics-bar">
-            <div class="dyn-item">
-              <span class="dyn-label">Physical Strain:</span>
-              <span id="r1-strain" class="badge strain-low">Low</span>
-            </div>
-            <div class="dyn-item">
-              <span class="dyn-label">Technique Level:</span>
-              <span id="r1-tech-badge" class="badge badge-tech">All-Round</span>
-            </div>
-            <div class="dyn-item">
-              <span class="dyn-label">Arc Profile:</span>
-              <span id="r1-arc-profile" class="dyn-value">Medium Arc</span>
-            </div>
+          
+          <div class="advanced-stats">
+            <span>High-Impact Power: <strong id="r1-speed-high" class="text-blue"></strong></span>
+            <span>Low-Impact Touch: <strong id="r1-speed-low" class="text-blue"></strong></span>
+            <span>Net Throw Angle: <strong id="r1-throw" class="text-blue"></strong></span>
           </div>
-
-          <!-- Alert Warnings Box -->
-          <div id="r1-warnings" class="warnings-box hidden"></div>
+          <div class="hidden">
+            <span id="r1-fh-throw"></span> <span id="r1-bh-throw"></span>
+          </div>
         </div>
-      </section>
+      </div>
 
-      <!-- RACKET SETUP #2 (Comparison Mode) -->
-      <section id="card-r2" class="racket-card hidden">
+      <!-- RACKET #2 (Initially Hidden) -->
+      <div id="card-r2" class="racket-card hidden">
         <h2>Racket Setup #2</h2>
         
         <div class="form-group">
@@ -138,94 +397,63 @@
         </div>
 
         <div class="pro-matches-box">
-          <span class="pro-label">🏆 Similar Pro Equipment Matches:</span>
-          <div id="r2-pros" class="pro-tags-container"></div>
+          <div class="box-title">🏆 Similar Pro Equipment Matches:</div>
+          <div id="r2-pro-matches" class="pro-matches-content"></div>
         </div>
 
-        <div class="summary-card">
+        <div id="r2-warnings" class="warnings-container hidden"></div>
+
+        <div class="summary-box">
           <h3>Racket #2 Summary</h3>
-          <div class="metrics-grid">
-            <div class="metric">
-              <span class="metric-label">TOTAL PRICE</span>
-              <span id="r2-price" class="metric-value text-green">$0</span>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-label">TOTAL PRICE</span>
+              <span id="r2-price" class="stat-value text-green"></span>
             </div>
-            <div class="metric">
-              <span class="metric-label">EST. WEIGHT</span>
-              <span id="r2-weight" class="metric-value">0g</span>
+            <div class="stat-card">
+              <span class="stat-label">EST. WEIGHT</span>
+              <span id="r2-weight" class="stat-value"></span>
             </div>
-            <div class="metric">
-              <span class="metric-label">HIGH-IMPACT POWER</span>
-              <span id="r2-speed-high" class="metric-value">0 / 100</span>
+            <div class="stat-card">
+              <span class="stat-label">SPEED / POWER RATING</span>
+              <span id="r2-speed" class="stat-value"></span>
             </div>
-            <div class="metric">
-              <span class="metric-label">LOW-IMPACT TOUCH</span>
-              <span id="r2-speed-low" class="metric-value">0 / 100</span>
+            <div class="stat-card">
+              <span class="stat-label">CONTROL RATING</span>
+              <span id="r2-control" class="stat-value"></span>
             </div>
-            <div class="metric">
-              <span class="metric-label">CONTROL RATING</span>
-              <span id="r2-control" class="metric-value">0 / 100</span>
+            <div class="stat-card">
+              <span class="stat-label">SPIN RATING</span>
+              <span id="r2-spin" class="stat-value"></span>
             </div>
-            <div class="metric">
-              <span class="metric-label">SPIN RATING</span>
-              <span id="r2-spin" class="metric-value">0 / 100</span>
-            </div>
-            <div class="metric">
-              <span class="metric-label">THROW ANGLE (1-5)</span>
-              <span id="r2-throw" class="metric-value">0 / 5.0</span>
-            </div>
-            <div class="metric">
-              <span class="metric-label">FH / BH HARDNESS</span>
-              <span id="r2-hardness" class="metric-value text-amber">- / -</span>
+            <div class="stat-card">
+              <span class="stat-label">FH / BH HARDNESS</span>
+              <span id="r2-hardness" class="stat-value text-orange"></span>
             </div>
           </div>
-
-          <div class="dynamics-bar">
-            <div class="dyn-item">
-              <span class="dyn-label">Physical Strain:</span>
-              <span id="r2-strain" class="badge strain-low">Low</span>
-            </div>
-            <div class="dyn-item">
-              <span class="dyn-label">Technique Level:</span>
-              <span id="r2-tech-badge" class="badge badge-tech">All-Round</span>
-            </div>
-            <div class="dyn-item">
-              <span class="dyn-label">Arc Profile:</span>
-              <span id="r2-arc-profile" class="dyn-value">Medium Arc</span>
-            </div>
+          
+          <div class="advanced-stats">
+            <span>High-Impact Power: <strong id="r2-speed-high" class="text-blue"></strong></span>
+            <span>Low-Impact Touch: <strong id="r2-speed-low" class="text-blue"></strong></span>
+            <span>Net Throw Angle: <strong id="r2-throw" class="text-blue"></strong></span>
           </div>
-
-          <div id="r2-warnings" class="warnings-box hidden"></div>
+          <div class="hidden">
+            <span id="r2-fh-throw"></span> <span id="r2-bh-throw"></span>
+          </div>
         </div>
-      </section>
+      </div>
 
     </div>
+  </div>
 
-    <!-- Side-by-Side Comparison Box -->
-    <section id="comparisonSummaryBox" class="comparison-box hidden">
-      <h3>Side-by-Side Equipment Comparison</h3>
-      <div id="comparisonMetricsGrid" class="comp-grid"></div>
-    </section>
-  </main>
-
-  <!-- Search Racket Feels Modal -->
-  <div id="feelModal" class="modal-overlay hidden">
+  <!-- FLAGSHIP MODAL -->
+  <div id="flagshipModal" class="modal-overlay hidden">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>Search Equipment by Feel & Budget</h3>
-        <button id="closeFeelModal" class="close-btn">&times;</button>
+        <h2>Load Flagship Setup</h2>
+        <button id="closeFlagshipModal" class="btn-close">✕</button>
       </div>
-      <div class="modal-grid">
-        <button class="feel-card" data-feel="max-speed">⚡ Max Power / Fast Loop</button>
-        <button class="feel-card" data-feel="max-control">🎯 Max Control / Soft Touch</button>
-        <button class="feel-card" data-feel="max-spin">🌀 Maximum Spin Potential</button>
-        <button class="feel-card" data-feel="lightest">🪶 Ultra Light Weight Setup</button>
-        <button class="feel-card" data-feel="heaviest">🏋️ Heavy Power Setup</button>
-        <button class="feel-card" data-feel="softest">🧸 Soft Dwell & High Control</button>
-        <button class="feel-card" data-feel="hardest">🧱 Ultra Hard / Stiff Direct</button>
-        <button class="feel-card" data-feel="cheapest">💵 Most Budget Friendly</button>
-        <button class="feel-card" data-feel="expensive">💎 Premium Flagship Gear</button>
-        <button class="feel-card" data-feel="best-value">⚖️ Highest Performance / Price</button>
-      </div>
+      <div id="flagshipGrid" class="flagship-grid"></div>
     </div>
   </div>
 
