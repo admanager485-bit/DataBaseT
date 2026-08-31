@@ -1,154 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Table Tennis Database</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TT Racket Studio</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <header class="navbar">
-    <div class="logo">🏓 Table Tennis Database</div>
-    <button id="compareBtn" class="btn btn-compare">+ Compare Second Racket</button>
+  <!-- Top Navigation Bar -->
+  <header class="app-header">
+    <div class="logo">
+      <span class="logo-icon">🏓</span>
+      <h1>TT Racket Studio</h1>
+    </div>
+    <div class="header-actions">
+      <button id="feelBtn" class="btn btn-secondary">🔍 Search Racket Feels</button>
+      <button id="compareBtn" class="btn btn-primary">+ Compare Second Racket</button>
+    </div>
   </header>
 
+  <!-- Main Racket Workspace -->
   <main class="container">
-
-    <!-- SIDE-BY-SIDE COMPARISON SUMMARY (ACTIVE ONLY IN COMPARE MODE) -->
-    <section id="comparisonSummaryBox" class="comparison-summary hidden">
-      <h2>⚡ Direct Comparison Breakdown</h2>
-      <div id="comparisonMetricsGrid" class="comp-grid"></div>
-    </section>
-
-    <div id="racketGrid" class="racket-grid single-mode">
+    <div id="racketGrid" class="single-mode">
       
-      <!-- RACKET SETUP 1 -->
-      <section class="racket-card" id="card-r1">
-        <h2 class="card-title">Racket Setup #1</h2>
+      <!-- RACKET SETUP #1 -->
+      <section id="card-r1" class="racket-card">
+        <h2>Racket Setup #1</h2>
         
         <div class="form-group">
           <label for="r1-blade">Blade Choice</label>
-          <select id="r1-blade" class="custom-select"></select>
+          <select id="r1-blade"></select>
         </div>
 
         <div class="form-group">
           <label for="r1-handle">Blade Handle Type</label>
-          <select id="r1-handle" class="custom-select"></select>
+          <select id="r1-handle"></select>
         </div>
 
         <div class="form-group">
           <label for="r1-fh">Forehand Rubber (FH)</label>
-          <select id="r1-fh" class="custom-select"></select>
+          <select id="r1-fh"></select>
         </div>
 
         <div class="form-group">
           <label for="r1-bh">Backhand Rubber (BH)</label>
-          <select id="r1-bh" class="custom-select"></select>
+          <select id="r1-bh"></select>
         </div>
 
-        <!-- PRO MATCHES -->
-        <div class="pro-box">
-          <span class="pro-title">🏆 Similar Pro Equipment Matches:</span>
-          <div id="r1-pros" class="pro-tags"></div>
+        <!-- Pro Equipment Matches -->
+        <div class="pro-matches-box">
+          <span class="pro-label">🏆 Similar Pro Equipment Matches:</span>
+          <div id="r1-pros" class="pro-tags-container"></div>
         </div>
 
-        <!-- SUMMARY PANEL -->
-        <div class="summary-box">
+        <!-- Racket #1 Summary -->
+        <div class="summary-card">
           <h3>Racket #1 Summary</h3>
           <div class="metrics-grid">
-            <div class="metric-card">
-              <span class="m-label">Total Price</span>
-              <span class="m-value price-text" id="r1-price">$0</span>
+            <div class="metric">
+              <span class="metric-label">TOTAL PRICE</span>
+              <span id="r1-price" class="metric-value text-green">$0</span>
             </div>
-            <div class="metric-card">
-              <span class="m-label">Est. Weight</span>
-              <span class="m-value" id="r1-weight">0g</span>
+            <div class="metric">
+              <span class="metric-label">EST. WEIGHT</span>
+              <span id="r1-weight" class="metric-value">0g</span>
             </div>
-            <div class="metric-card">
-              <span class="m-label">Speed / Power Rating</span>
-              <span class="m-value" id="r1-speed">0 / 100</span>
+            <div class="metric">
+              <span class="metric-label">HIGH-IMPACT POWER</span>
+              <span id="r1-speed-high" class="metric-value">0 / 100</span>
             </div>
-            <div class="metric-card">
-              <span class="m-label">Control Rating</span>
-              <span class="m-value" id="r1-control">0 / 100</span>
+            <div class="metric">
+              <span class="metric-label">LOW-IMPACT TOUCH</span>
+              <span id="r1-speed-low" class="metric-value">0 / 100</span>
             </div>
-            <div class="metric-card">
-              <span class="m-label">Spin Rating</span>
-              <span class="m-value" id="r1-spin">0 / 100</span>
+            <div class="metric">
+              <span class="metric-label">CONTROL RATING</span>
+              <span id="r1-control" class="metric-value">0 / 100</span>
             </div>
-            <div class="metric-card">
-              <span class="m-label">FH / BH Hardness</span>
-              <span class="m-value hardness-text" id="r1-hardness">- / -</span>
+            <div class="metric">
+              <span class="metric-label">SPIN RATING</span>
+              <span id="r1-spin" class="metric-value">0 / 100</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">THROW ANGLE (1-5)</span>
+              <span id="r1-throw" class="metric-value">0 / 5.0</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">FH / BH HARDNESS</span>
+              <span id="r1-hardness" class="metric-value text-amber">- / -</span>
             </div>
           </div>
+
+          <!-- Dynamic Indicators -->
+          <div class="dynamics-bar">
+            <div class="dyn-item">
+              <span class="dyn-label">Physical Strain:</span>
+              <span id="r1-strain" class="badge strain-low">Low</span>
+            </div>
+            <div class="dyn-item">
+              <span class="dyn-label">Technique Level:</span>
+              <span id="r1-tech-badge" class="badge badge-tech">All-Round</span>
+            </div>
+            <div class="dyn-item">
+              <span class="dyn-label">Arc Profile:</span>
+              <span id="r1-arc-profile" class="dyn-value">Medium Arc</span>
+            </div>
+          </div>
+
+          <!-- Alert Warnings Box -->
+          <div id="r1-warnings" class="warnings-box hidden"></div>
         </div>
       </section>
 
-      <!-- RACKET SETUP 2 -->
-      <section class="racket-card hidden" id="card-r2">
-        <h2 class="card-title">Racket Setup #2 (Comparison)</h2>
+      <!-- RACKET SETUP #2 (Comparison Mode) -->
+      <section id="card-r2" class="racket-card hidden">
+        <h2>Racket Setup #2</h2>
         
         <div class="form-group">
           <label for="r2-blade">Blade Choice</label>
-          <select id="r2-blade" class="custom-select"></select>
+          <select id="r2-blade"></select>
         </div>
 
         <div class="form-group">
           <label for="r2-handle">Blade Handle Type</label>
-          <select id="r2-handle" class="custom-select"></select>
+          <select id="r2-handle"></select>
         </div>
 
         <div class="form-group">
           <label for="r2-fh">Forehand Rubber (FH)</label>
-          <select id="r2-fh" class="custom-select"></select>
+          <select id="r2-fh"></select>
         </div>
 
         <div class="form-group">
           <label for="r2-bh">Backhand Rubber (BH)</label>
-          <select id="r2-bh" class="custom-select"></select>
+          <select id="r2-bh"></select>
         </div>
 
-        <!-- PRO MATCHES -->
-        <div class="pro-box">
-          <span class="pro-title">🏆 Similar Pro Equipment Matches:</span>
-          <div id="r2-pros" class="pro-tags"></div>
+        <div class="pro-matches-box">
+          <span class="pro-label">🏆 Similar Pro Equipment Matches:</span>
+          <div id="r2-pros" class="pro-tags-container"></div>
         </div>
 
-        <!-- SUMMARY PANEL -->
-        <div class="summary-box">
+        <div class="summary-card">
           <h3>Racket #2 Summary</h3>
           <div class="metrics-grid">
-            <div class="metric-card">
-              <span class="m-label">Total Price</span>
-              <span class="m-value price-text" id="r2-price">$0</span>
+            <div class="metric">
+              <span class="metric-label">TOTAL PRICE</span>
+              <span id="r2-price" class="metric-value text-green">$0</span>
             </div>
-            <div class="metric-card">
-              <span class="m-label">Est. Weight</span>
-              <span class="m-value" id="r2-weight">0g</span>
+            <div class="metric">
+              <span class="metric-label">EST. WEIGHT</span>
+              <span id="r2-weight" class="metric-value">0g</span>
             </div>
-            <div class="metric-card">
-              <span class="m-label">Speed / Power Rating</span>
-              <span class="m-value" id="r2-speed">0 / 100</span>
+            <div class="metric">
+              <span class="metric-label">HIGH-IMPACT POWER</span>
+              <span id="r2-speed-high" class="metric-value">0 / 100</span>
             </div>
-            <div class="metric-card">
-              <span class="m-label">Control Rating</span>
-              <span class="m-value" id="r2-control">0 / 100</span>
+            <div class="metric">
+              <span class="metric-label">LOW-IMPACT TOUCH</span>
+              <span id="r2-speed-low" class="metric-value">0 / 100</span>
             </div>
-            <div class="metric-card">
-              <span class="m-label">Spin Rating</span>
-              <span class="m-value" id="r2-spin">0 / 100</span>
+            <div class="metric">
+              <span class="metric-label">CONTROL RATING</span>
+              <span id="r2-control" class="metric-value">0 / 100</span>
             </div>
-            <div class="metric-card">
-              <span class="m-label">FH / BH Hardness</span>
-              <span class="m-value hardness-text" id="r2-hardness">- / -</span>
+            <div class="metric">
+              <span class="metric-label">SPIN RATING</span>
+              <span id="r2-spin" class="metric-value">0 / 100</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">THROW ANGLE (1-5)</span>
+              <span id="r2-throw" class="metric-value">0 / 5.0</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">FH / BH HARDNESS</span>
+              <span id="r2-hardness" class="metric-value text-amber">- / -</span>
             </div>
           </div>
+
+          <div class="dynamics-bar">
+            <div class="dyn-item">
+              <span class="dyn-label">Physical Strain:</span>
+              <span id="r2-strain" class="badge strain-low">Low</span>
+            </div>
+            <div class="dyn-item">
+              <span class="dyn-label">Technique Level:</span>
+              <span id="r2-tech-badge" class="badge badge-tech">All-Round</span>
+            </div>
+            <div class="dyn-item">
+              <span class="dyn-label">Arc Profile:</span>
+              <span id="r2-arc-profile" class="dyn-value">Medium Arc</span>
+            </div>
+          </div>
+
+          <div id="r2-warnings" class="warnings-box hidden"></div>
         </div>
       </section>
 
     </div>
+
+    <!-- Side-by-Side Comparison Box -->
+    <section id="comparisonSummaryBox" class="comparison-box hidden">
+      <h3>Side-by-Side Equipment Comparison</h3>
+      <div id="comparisonMetricsGrid" class="comp-grid"></div>
+    </section>
   </main>
+
+  <!-- Search Racket Feels Modal -->
+  <div id="feelModal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Search Equipment by Feel & Budget</h3>
+        <button id="closeFeelModal" class="close-btn">&times;</button>
+      </div>
+      <div class="modal-grid">
+        <button class="feel-card" data-feel="max-speed">⚡ Max Power / Fast Loop</button>
+        <button class="feel-card" data-feel="max-control">🎯 Max Control / Soft Touch</button>
+        <button class="feel-card" data-feel="max-spin">🌀 Maximum Spin Potential</button>
+        <button class="feel-card" data-feel="lightest">🪶 Ultra Light Weight Setup</button>
+        <button class="feel-card" data-feel="heaviest">🏋️ Heavy Power Setup</button>
+        <button class="feel-card" data-feel="softest">🧸 Soft Dwell & High Control</button>
+        <button class="feel-card" data-feel="hardest">🧱 Ultra Hard / Stiff Direct</button>
+        <button class="feel-card" data-feel="cheapest">💵 Most Budget Friendly</button>
+        <button class="feel-card" data-feel="expensive">💎 Premium Flagship Gear</button>
+        <button class="feel-card" data-feel="best-value">⚖️ Highest Performance / Price</button>
+      </div>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>
