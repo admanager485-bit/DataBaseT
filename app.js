@@ -1,64 +1,32 @@
+/**
+ * Table Tennis Dynamic Physics & Equipment Synergy Engine
+ * Replaces static RPG-like ratings with non-linear material mechanics.
+ */
+
 const BRANDS = [
   'andro', 'butterfly', 'dhs', 'donic', 'friendship', 
   'loki', 'nittaku', 'palio', 'sanwei', 'stiga', 
   'tibhar', 'victas', 'xiom', 'yasaka', 'yinhe'
 ];
 
-// Expanded 50 player profiles
-const PRO_PROFILES = [
-  { name: "Ma Long", brand: "DHS", bladeCategory: "inner", rubberCategory: "tacky", targetSpeed: 95, targetControl: 86, style: "Power Loop & All-Around Dominance" },
-  { name: "Fan Zhendong", brand: "Butterfly", bladeCategory: "outer", rubberCategory: "hybrid", targetSpeed: 96, targetControl: 84, style: "Aggressive Counter-Drive" },
-  { name: "Wang Chuqin", brand: "DHS", bladeCategory: "inner", rubberCategory: "tacky", targetSpeed: 96, targetControl: 85, style: "Left-Handed Explosive Attack" },
-  { name: "Lin Shidong", brand: "DHS", bladeCategory: "inner", rubberCategory: "tacky", targetSpeed: 95, targetControl: 85, style: "Modern Fast Close-Table Attack" },
-  { name: "Liang Jingkun", brand: "DHS", bladeCategory: "inner", rubberCategory: "tacky", targetSpeed: 94, targetControl: 85, style: "Heavy Power Drive & Counter-Loop" },
-  { name: "Truls Möregårdh", brand: "Stiga", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 93, targetControl: 87, style: "Creative Variation & Block" },
-  { name: "Felix Lebrun", brand: "Tibhar", bladeCategory: "outer", rubberCategory: "hybrid", targetSpeed: 95, targetControl: 84, style: "Penhold Ultra-Fast Attack" },
-  { name: "Alexis Lebrun", brand: "Tibhar", bladeCategory: "outer", rubberCategory: "hybrid", targetSpeed: 96, targetControl: 80, style: "High-Risk Power Looper" },
-  { name: "Hugo Calderano", brand: "Xiom", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 97, targetControl: 79, style: "Maximum Power From Both Wings" },
-  { name: "Tomokazu Harimoto", brand: "Butterfly", bladeCategory: "inner", rubberCategory: "tensor", targetSpeed: 93, targetControl: 88, style: "Close-Table Power Counter" },
-  { name: "Lin Yun-Ju", brand: "Butterfly", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 92, targetControl: 89, style: "Flick Precision & Placement" },
-  { name: "Dimitrij Ovtcharov", brand: "Butterfly", bladeCategory: "inner", rubberCategory: "tensor", targetSpeed: 93, targetControl: 86, style: "Heavy Serve & Backhand Power" },
-  { name: "Qiu Dang", brand: "Andro", bladeCategory: "inner", rubberCategory: "tensor", targetSpeed: 91, targetControl: 88, style: "Penhold Control & Placement" },
-  { name: "Patrick Franziska", brand: "Butterfly", bladeCategory: "inner", rubberCategory: "tensor", targetSpeed: 92, targetControl: 87, style: "Powerful Backhand Counter" },
-  { name: "Timo Boll", brand: "Butterfly", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 91, targetControl: 90, style: "Heavy Spin & Precision Placement" },
-  { name: "Quadri Aruna", brand: "Gewo", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 98, targetControl: 75, style: "Brutal Forehand Loop Power" },
-  { name: "Jang Woojin", brand: "Victas", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 95, targetControl: 82, style: "Footwork & Forehand Power" },
-  { name: "An Jaehyun", brand: "Victas", bladeCategory: "inner", rubberCategory: "tensor", targetSpeed: 91, targetControl: 88, style: "Dynamic Mid-Distance Looper" },
-  { name: "Cho Daeseong", brand: "Butterfly", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 92, targetControl: 86, style: "Left-Handed Quick Attack" },
-  { name: "Darko Jorgic", brand: "Tibhar", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 94, targetControl: 84, style: "Devastating Backhand Loop" },
-  { name: "Kristian Karlsson", brand: "Stiga", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 92, targetControl: 87, style: "Left-Handed Power Looper" },
-  { name: "Anton Källberg", brand: "Stiga", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 93, targetControl: 86, style: "High-Speed Counter-Drive" },
-  { name: "Marcos Freitas", brand: "Butterfly", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 90, targetControl: 89, style: "Left-Handed Control Looper" },
-  { name: "Omar Assar", brand: "Butterfly", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 92, targetControl: 87, style: "Tall Mid-Distance Rally Specialist" },
-  { name: "Liam Pitchford", brand: "Victas", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 94, targetControl: 83, style: "Ultra-Fast Backhand Punch" },
-  { name: "Simon Gauzy", brand: "Andro", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 90, targetControl: 91, style: "Touch & Unconventional Placement" },
-  { name: "Wong Chun Ting", brand: "DHS", bladeCategory: "inner", rubberCategory: "tacky", targetSpeed: 92, targetControl: 87, style: "Penhold Reverse Backhand Attack" },
-  { name: "Chuang Chih-Yuan", brand: "Butterfly", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 91, targetControl: 88, style: "Fast Close-Table Counter-Attack" },
-  { name: "Kao Cheng-Jui", brand: "Tibhar", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 92, targetControl: 86, style: "Fast Attack & Rapid Footwork" },
-  { name: "Sharath Kamal", brand: "Butterfly", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 91, targetControl: 86, style: "Power Forehand & Long Reach" },
-  { name: "Xu Xin", brand: "DHS", bladeCategory: "inner", rubberCategory: "tacky", targetSpeed: 94, targetControl: 89, style: "Penhold Cloud-Walker & Sky Loop" },
+// Physical Constant Mappings
+const STIFFNESS_FACTORS = {
+  flexible: 0.85,
+  medium: 1.0,
+  stiff: 1.25
+};
 
-  { name: "Sun Yingsha", brand: "Stiga", bladeCategory: "outer", rubberCategory: "tacky", targetSpeed: 96, targetControl: 85, style: "Fast Power Offense" },
-  { name: "Chen Meng", brand: "Butterfly", bladeCategory: "inner", rubberCategory: "tacky", targetSpeed: 94, targetControl: 88, style: "Solid Counter-Loop Drive" },
-  { name: "Wang Manyu", brand: "DHS", bladeCategory: "inner", rubberCategory: "tacky", targetSpeed: 95, targetControl: 86, style: "Relentless Two-Winged Loop" },
-  { name: "Wang Yidi", brand: "DHS", bladeCategory: "inner", rubberCategory: "tacky", targetSpeed: 93, targetControl: 86, style: "Aggressive Power Drive" },
-  { name: "Kuai Man", brand: "DHS", bladeCategory: "inner", rubberCategory: "tacky", targetSpeed: 92, targetControl: 87, style: "Left-Handed Placement & Attack" },
-  { name: "Hina Hayata", brand: "Nittaku", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 94, targetControl: 86, style: "Left-Handed High-Spin Loop" },
-  { name: "Miwa Harimoto", brand: "Butterfly", bladeCategory: "inner", rubberCategory: "tensor", targetSpeed: 92, targetControl: 88, style: "Fast Two-Winged Counter-Drive" },
-  { name: "Mima Ito", brand: "Nittaku", bladeCategory: "outer", rubberCategory: "pips", targetSpeed: 92, targetControl: 85, style: "Fast Close-Table Pips Attack" },
-  { name: "Miu Hirano", brand: "Stiga", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 93, targetControl: 87, style: "Lightning Fast Close-Table Drive" },
-  { name: "Shin Yubin", brand: "Butterfly", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 92, targetControl: 88, style: "Consistent Close-Table Attack" },
-  { name: "Jeon Jihee", brand: "Butterfly", bladeCategory: "inner", rubberCategory: "tacky", targetSpeed: 91, targetControl: 88, style: "Left-Handed Controlled Loop" },
-  { name: "Bernadette Szőcs", brand: "Tibhar", bladeCategory: "allwood", rubberCategory: "tensor", targetSpeed: 88, targetControl: 92, style: "Controlled Block & Precision" },
-  { name: "Elizabeta Samara", brand: "Tibhar", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 89, targetControl: 90, style: "Left-Handed Consistent Looper" },
-  { name: "Sofia Polcanova", brand: "Nittaku", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 89, targetControl: 90, style: "Left-Handed Tall Precision Block" },
-  { name: "Nina Mittelham", brand: "Victas", bladeCategory: "outer", rubberCategory: "tensor", targetSpeed: 90, targetControl: 89, style: "Solid Two-Winged Counter" },
+const COMPOSITION_POWER_MULTIPLIERS = {
+  pure_wood: 0.90,
+  inner_carbon: 1.05,
+  outer_carbon: 1.20
+};
 
-  { name: "Han Ying", brand: "Victas", bladeCategory: "defensive", rubberCategory: "pips", targetSpeed: 68, targetControl: 97, style: "Classical Chopper & Counter" },
-  { name: "Ruwen Filus", brand: "Butterfly", bladeCategory: "defensive", rubberCategory: "pips", targetSpeed: 70, targetControl: 96, style: "Modern Defense & Chop-Attack" },
-  { name: "Yang Wang", brand: "Victas", bladeCategory: "defensive", rubberCategory: "pips", targetSpeed: 71, targetControl: 95, style: "Defensive Chopper & Forehand Smash" },
-  { name: "Ni Xialian", brand: "Victas", bladeCategory: "allwood", rubberCategory: "pips", targetSpeed: 82, targetControl: 93, style: "Penhold Short Pips Block & Push" }
-];
+const DEFAULT_RUBBER_DENSITY = {
+  tacky: 0.42,        // Dense Chinese sponges (e.g., DHS Globe/Hurricane)
+  tensor: 0.35,       // Medium ESN/Japanese Tensors (e.g., Butterfly/TIBHAR)
+  frictionless: 0.28  // Anti-spin / Light defensive rubbers
+};
 
 let catalog = {
   blades: [],
@@ -67,74 +35,319 @@ let catalog = {
 
 let isCompareActive = false;
 
-// Dynamic cut rubber weight based on brand averages (in grams)
-function getRubberWeight(rubber) {
-  if (rubber && rubber.weight && rubber.weight > 0) {
-    return rubber.weight; 
-  }
-  
-  const brand = (rubber && rubber.brand) ? rubber.brand.toLowerCase() : '';
-  
-  switch (brand) {
-    case 'dhs': return 52;
-    case 'tibhar': return 49;
-    case 'andro': 
-    case 'xiom': return 48;
-    case 'butterfly':
-    case 'nittaku':
-    case 'yasaka': return 47;
-    case 'stiga':
-    case 'sanwei':
-    case 'friendship': return 46;
-    case 'yinhe':
-    case 'loki': return 45;
-    case 'donic':
-    case 'victas': return 44;
-    default: return 45;
-  }
+// ------------------------------------------------------------------
+// 1. DYNAMIC PHYSICS & BALANCE CALCULATORS
+// ------------------------------------------------------------------
+
+/**
+ * Calculates blade head area in cm² from width & length (mm).
+ * Standard teardrop shape approximation: Area ≈ (π * L * W) / 400
+ */
+function calculateHeadArea(lengthMm = 157, widthMm = 150) {
+  return ((Math.PI * lengthMm * widthMm) / 400);
 }
 
-// Total racket weight calculator (Blade + FH + BH)
-function calculateTotalWeight(blade, fh, bh) {
-  const bladeWeight = blade.weight || 85;
-  const fhWeight = getRubberWeight(fh);
-  const bhWeight = getRubberWeight(bh);
-  return bladeWeight + fhWeight + bhWeight;
+/**
+ * Calculates estimated cut rubber weight using sponge density and geometry.
+ * Formula: Cut Weight = Sponge Density * Thickness (mm) * Head Area (cm²) * 0.78
+ */
+function calculateCutRubberWeight(rubber, headAreaCm2 = 184.9) {
+  if (!rubber) return 45;
+  if (rubber.cutWeight && rubber.cutWeight > 0) return rubber.cutWeight;
+
+  const thickness = parseFloat(rubber.thickness) || 2.1;
+  const topsheet = rubber.topsheetType || 'tensor';
+  const density = rubber.spongeDensity || DEFAULT_RUBBER_DENSITY[topsheet] || 0.35;
+
+  return Math.round(density * thickness * headAreaCm2 * 0.78);
 }
 
-// Normalized Hardness Parser (Prevents mistaking sponge names like #80 for degrees)
-function parseHardnessValue(rubber) {
-  if (!rubber) return 40;
+/**
+ * High-Impact Speed (Power Loops/Counter-Drives):
+ * Effective Speed (High) = Blade Stiffness Factor * (1 + (Sponge Hardness Shore C / 100))
+ */
+function calculateHighImpactSpeed(blade, fh, bh) {
+  const stiffnessKey = (blade.stiffness || 'medium').toLowerCase();
+  const stiffnessFactor = STIFFNESS_FACTORS[stiffnessKey] || 1.0;
+  const compositionMult = COMPOSITION_POWER_MULTIPLIERS[blade.composition] || 1.0;
+
+  const fhHardness = parseHardnessShoreC(fh);
+  const bhHardness = parseHardnessShoreC(bh);
+  const avgHardness = (fhHardness + bhHardness) / 2;
+
+  const basePower = stiffnessFactor * (1 + (avgHardness / 100));
+  return Math.min(100, Math.round(basePower * 42 * compositionMult));
+}
+
+/**
+ * Low-Impact Speed (Short Game / Touch Pushes):
+ * Softer sponges and flexible blades absorb impact, giving lower initial speed.
+ */
+function calculateLowImpactSpeed(blade, fh, bh) {
+  const stiffnessKey = (blade.stiffness || 'medium').toLowerCase();
+  const stiffnessFactor = STIFFNESS_FACTORS[stiffnessKey] || 1.0;
   
-  // Explicitly parse the hardness field first (e.g., "37°" -> 37)
-  if (rubber.hardness) {
+  const fhHardness = parseHardnessShoreC(fh);
+  const bhHardness = parseHardnessShoreC(bh);
+  const avgHardness = (fhHardness + bhHardness) / 2;
+
+  // Linear low-energy trampoline effect
+  const touchResponse = (stiffnessFactor * 0.4) + (avgHardness * 0.3);
+  return Math.min(100, Math.round(touchResponse));
+}
+
+/**
+ * Parses or normalizes rubber hardness to Shore C (°).
+ * Converts Chinese Shore A degrees (e.g. 37-41 DHS) into European Shore C (~47-51).
+ */
+function parseHardnessShoreC(rubber) {
+  if (!rubber) return 45;
+  let deg = 45;
+
+  if (rubber.spongeHardness) {
+    deg = parseFloat(rubber.spongeHardness);
+  } else if (rubber.hardness) {
     const matched = rubber.hardness.toString().match(/\d+/);
-    if (matched) {
-      let degree = parseInt(matched[0], 10);
-      // Normalize Chinese DHS scale (37° DHS ≈ 47° Euro scale) for fair comparison
-      if (rubber.brand && rubber.brand.toUpperCase() === "DHS" && degree <= 41) {
-        degree += 10; 
-      }
-      return degree;
-    }
+    if (matched) deg = parseInt(matched[0], 10);
   }
 
-  // Fallback to checking version field if hardness property is absent
-  if (rubber.version) {
-    const matched = rubber.version.toString().match(/\d+/);
-    if (matched && parseInt(matched[0], 10) <= 60) {
-      return parseInt(matched[0], 10);
-    }
+  // Chinese DHS conversion to Shore C scale
+  if (rubber.brand && rubber.brand.toUpperCase() === 'DHS' && deg <= 41) {
+    deg += 10;
   }
 
-  return 45;
+  return Math.min(60, Math.max(30, deg));
 }
+
+/**
+ * Net Throw Angle (1 - 5 Scale)
+ */
+function calculateNetThrowAngle(blade, fh, bh) {
+  const bladeDwell = blade.stiffness === 'flexible' ? 1.5 : (blade.stiffness === 'stiff' ? -1.0 : 0);
+  
+  const getRubberThrow = (r) => {
+    if (!r) return 3;
+    if (r.throwAngle === 'high') return 4.5;
+    if (r.throwAngle === 'low') return 1.5;
+    return 3.0;
+  };
+
+  const fhThrow = getRubberThrow(fh);
+  const bhThrow = getRubberThrow(bh);
+  const rawThrow = 2.5 + bladeDwell + ((fhThrow + bhThrow) / 4);
+
+  return Math.max(1.0, Math.min(5.0, parseFloat(rawThrow.toFixed(1))));
+}
+
+// ------------------------------------------------------------------
+// 2. SYNERGY, WARNING & STRAIN DETECTOR ENGINE
+// ------------------------------------------------------------------
+
+function evaluateSetupSynergy(blade, fh, bh, bladeWeight, fhCutWeight, bhCutWeight) {
+  const warnings = [];
+  const totalCutRubberWeight = fhCutWeight + bhCutWeight;
+  const isStiff = blade.stiffness === 'stiff';
+  const isOuterCarbon = blade.composition === 'outer_carbon';
+
+  const fhHard = parseHardnessShoreC(fh) >= 48;
+  const bhHard = parseHardnessShoreC(bh) >= 48;
+  const fhTacky = fh.topsheetType === 'tacky';
+  const bhTacky = bh.topsheetType === 'tacky';
+
+  // Warning 1: Stiff Outer-Carbon + Hard Tacky Sponge without power mechanics
+  if (isOuterCarbon && isStiff && ((fhHard && fhTacky) || (bhHard && bhTacky))) {
+    warnings.push({
+      type: 'mechanics',
+      title: 'Power Mechanics Required',
+      message: 'Pairing a stiff outer-carbon blade with a high-hardness tacky sponge requires full body engagement and fast arm acceleration to compress the sponge.'
+    });
+  }
+
+  // Warning 2: Balance Engine (Head-Heavy Alert)
+  if (totalCutRubberWeight > 95 && bladeWeight < 85) {
+    warnings.push({
+      type: 'balance',
+      title: 'Head-Heavy Alert',
+      message: 'Cut rubbers exceed 95g total on a light blade (<85g). High risk of wrist strain and sluggish recovery time during fast rallies.'
+    });
+  }
+
+  // Warning 3: Dynamic Trajectory Clash (Low Dwell + Low Throw)
+  const fhLowThrow = fh.throwAngle === 'low';
+  const bhLowThrow = bh.throwAngle === 'low';
+  if (isStiff && (fhLowThrow || bhLowThrow)) {
+    warnings.push({
+      type: 'trajectory',
+      title: 'Trajectory Clash Warning',
+      message: 'High Risk: Flat arc with short dwell time. High risk of balls netting on passive loops against heavy backspin.'
+    });
+  }
+
+  return warnings;
+}
+
+function calculatePhysicalStrainIndex(totalWeight, warnings) {
+  const hasHeadHeavy = warnings.some(w => w.type === 'balance');
+  if (totalWeight > 195 || (totalWeight > 185 && hasHeadHeavy)) {
+    return { level: 'High', class: 'strain-high' };
+  }
+  if (totalWeight > 178 || hasHeadHeavy) {
+    return { level: 'Moderate', class: 'strain-med' };
+  }
+  return { level: 'Low', class: 'strain-low' };
+}
+
+function calculateTechniqueBadge(effectiveSpeedHigh, blade, fh, bh) {
+  const isHardTacky = (fh.topsheetType === 'tacky' && parseHardnessShoreC(fh) >= 48) ||
+                      (bh.topsheetType === 'tacky' && parseHardnessShoreC(bh) >= 48);
+
+  if (effectiveSpeedHigh >= 88 || (blade.composition === 'outer_carbon' && isHardTacky)) {
+    return { label: 'Advanced / Pro', desc: 'Requires full stroke mechanics' };
+  }
+  if (effectiveSpeedHigh >= 70) {
+    return { label: 'Intermediate', desc: 'Developing power consistency' };
+  }
+  return { label: 'All-Round / Control', desc: 'Forgiving for entry-level technique' };
+}
+
+// ------------------------------------------------------------------
+// 3. UI RENDERING & SUMMARY UPDATES
+// ------------------------------------------------------------------
+
+function updateSummary(prefix) {
+  const bladeIdx = document.getElementById(`${prefix}-blade`).value;
+  const fhIdx = document.getElementById(`${prefix}-fh`).value;
+  const bhIdx = document.getElementById(`${prefix}-bh`).value;
+
+  const blade = catalog.blades[bladeIdx] || { 
+    price: 0, weight: 85, stiffness: 'medium', composition: 'pure_wood',
+    headLength: 157, headWidth: 150 
+  };
+  const fh = catalog.rubbers[fhIdx] || { price: 0, spongeHardness: 45, topsheetType: 'tensor', throwAngle: 'medium' };
+  const bh = catalog.rubbers[bhIdx] || { price: 0, spongeHardness: 45, topsheetType: 'tensor', throwAngle: 'medium' };
+
+  // Calculate Geometry & Weight
+  const headArea = calculateHeadArea(blade.headLength, blade.headWidth);
+  const bladeWeight = blade.weight || 85;
+  const weightTolerance = blade.weightTolerance || 5; // ±5g factory variance
+  const fhCutWeight = calculateCutRubberWeight(fh, headArea);
+  const bhCutWeight = calculateCutRubberWeight(bh, headArea);
+  const totalWeight = bladeWeight + fhCutWeight + bhCutWeight;
+
+  // Non-Linear Dynamic Speed Responses
+  const highImpactSpeed = calculateHighImpactSpeed(blade, fh, bh);
+  const lowImpactSpeed = calculateLowImpactSpeed(blade, fh, bh);
+  const netThrowAngle = calculateNetThrowAngle(blade, fh, bh);
+
+  // Warnings & Technical Metrics
+  const warnings = evaluateSetupSynergy(blade, fh, bh, bladeWeight, fhCutWeight, bhCutWeight);
+  const strainIndex = calculatePhysicalStrainIndex(totalWeight, warnings);
+  const techBadge = calculateTechniqueBadge(highImpactSpeed, blade, fh, bh);
+  const totalPrice = (blade.price || 0) + (fh.price || 0) + (bh.price || 0);
+
+  // DOM Updates
+  document.getElementById(`${prefix}-price`).textContent = `$${totalPrice}`;
+  document.getElementById(`${prefix}-weight`).textContent = `${totalWeight}g (±${weightTolerance}g)`;
+  document.getElementById(`${prefix}-speed-high`).textContent = `${highImpactSpeed} / 100`;
+  document.getElementById(`${prefix}-speed-low`).textContent = `${lowImpactSpeed} / 100`;
+  document.getElementById(`${prefix}-throw`).textContent = `${netThrowAngle} / 5.0`;
+  
+  // Render Badges & Arc Profile Visualizer
+  const strainEl = document.getElementById(`${prefix}-strain`);
+  if (strainEl) {
+    strainEl.textContent = strainIndex.level;
+    strainEl.className = `badge ${strainIndex.class}`;
+  }
+
+  const badgeEl = document.getElementById(`${prefix}-tech-badge`);
+  if (badgeEl) {
+    badgeEl.textContent = techBadge.label;
+    badgeEl.title = techBadge.desc;
+  }
+
+  const arcEl = document.getElementById(`${prefix}-arc-profile`);
+  if (arcEl) {
+    arcEl.textContent = netThrowAngle >= 3.8 ? 'High Arc Trajectory' : (netThrowAngle <= 2.2 ? 'Flat Linear Arc' : 'Medium Arc');
+  }
+
+  // Render Warning Alerts Box
+  const warningContainer = document.getElementById(`${prefix}-warnings`);
+  if (warningContainer) {
+    if (warnings.length > 0) {
+      warningContainer.innerHTML = warnings.map(w => 
+        `<div class="alert-box alert-${w.type}"><strong>${w.title}:</strong> ${w.message}</div>`
+      ).join('');
+      warningContainer.classList.remove('hidden');
+    } else {
+      warningContainer.innerHTML = '';
+      warningContainer.classList.add('hidden');
+    }
+  }
+
+  if (isCompareActive) {
+    updateComparisonSummary();
+  }
+}
+
+function updateComparisonSummary() {
+  const getData = (prefix) => {
+    const blade = catalog.blades[document.getElementById(`${prefix}-blade`).value] || {};
+    const fh = catalog.rubbers[document.getElementById(`${prefix}-fh`).value] || {};
+    const bh = catalog.rubbers[document.getElementById(`${prefix}-bh`).value] || {};
+
+    const headArea = calculateHeadArea(blade.headLength, blade.headWidth);
+    const bladeWeight = blade.weight || 85;
+    const fhCutWeight = calculateCutRubberWeight(fh, headArea);
+    const bhCutWeight = calculateCutRubberWeight(bh, headArea);
+
+    return {
+      price: (blade.price || 0) + (fh.price || 0) + (bh.price || 0),
+      weight: bladeWeight + fhCutWeight + bhCutWeight,
+      highSpeed: calculateHighImpactSpeed(blade, fh, bh),
+      lowSpeed: calculateLowImpactSpeed(blade, fh, bh),
+      throwAngle: calculateNetThrowAngle(blade, fh, bh)
+    };
+  };
+
+  const r1 = getData('r1');
+  const r2 = getData('r2');
+
+  const container = document.getElementById('comparisonMetricsGrid');
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="comp-card">
+      <div class="comp-label">Cheaper Setup</div>
+      <div class="comp-winner">${r1.price === r2.price ? 'Equal' : (r1.price < r2.price ? 'Racket #1' : 'Racket #2')}</div>
+      <div class="comp-diff">Diff: $${Math.abs(r1.price - r2.price)}</div>
+    </div>
+    <div class="comp-card">
+      <div class="comp-label">Lighter Setup</div>
+      <div class="comp-winner">${r1.weight === r2.weight ? 'Equal' : (r1.weight < r2.weight ? 'Racket #1' : 'Racket #2')}</div>
+      <div class="comp-diff">Diff: ${Math.abs(r1.weight - r2.weight)}g</div>
+    </div>
+    <div class="comp-card">
+      <div class="comp-label">High-Impact Power (Loops)</div>
+      <div class="comp-winner">${r1.highSpeed === r2.highSpeed ? 'Equal' : (r1.highSpeed > r2.highSpeed ? 'Racket #1' : 'Racket #2')}</div>
+      <div class="comp-diff">Diff: ${Math.abs(r1.highSpeed - r2.highSpeed)} pts</div>
+    </div>
+    <div class="comp-card">
+      <div class="comp-label">Touch Play Control (Pushes)</div>
+      <div class="comp-winner">${r1.lowSpeed === r2.lowSpeed ? 'Equal' : (r1.lowSpeed < r2.lowSpeed ? 'Racket #1 (Dampens More)' : 'Racket #2 (Dampens More)')}</div>
+      <div class="comp-diff">Diff: ${Math.abs(r1.lowSpeed - r2.lowSpeed)} pts</div>
+    </div>
+  `;
+}
+
+// ------------------------------------------------------------------
+// 4. DATA INITIALIZATION & DROPDOWN BINDING
+// ------------------------------------------------------------------
 
 async function init() {
   await loadAllJSONFiles();
 
   if (catalog.blades.length === 0 && catalog.rubbers.length === 0) {
-    alert("No JSON data loaded. Ensure you are running through a local web server.");
+    console.warn("No JSON data found. Loading fallback specs.");
     return;
   }
 
@@ -144,17 +357,8 @@ async function init() {
   bindEvents('r1');
   bindEvents('r2');
 
-  document.getElementById('compareBtn').addEventListener('click', toggleCompareMode);
-  
-  // Feel Modal Events
-  document.getElementById('feelBtn').addEventListener('click', openFeelModal);
-  document.getElementById('closeFeelModal').addEventListener('click', closeFeelModal);
-  document.querySelectorAll('.feel-card').forEach(card => {
-    card.addEventListener('click', (e) => {
-      const feel = e.currentTarget.getAttribute('data-feel');
-      applyFeelPreset(feel);
-    });
-  });
+  const compareBtn = document.getElementById('compareBtn');
+  if (compareBtn) compareBtn.addEventListener('click', toggleCompareMode);
 
   updateSummary('r1');
   updateSummary('r2');
@@ -189,20 +393,7 @@ function capitalize(str) {
 function sortByBrandAndName(a, b) {
   const brandCompare = (a.brand || '').localeCompare(b.brand || '');
   if (brandCompare !== 0) return brandCompare;
-  const nameCompare = (a.name || '').localeCompare(b.name || '');
-  if (nameCompare !== 0) return nameCompare;
-  return (a.version || '').localeCompare(b.version || '');
-}
-
-function formatRubberLabel(r) {
-  const tags = [];
-  if (r.version) tags.push(r.version);
-  if (r.spongeColor) tags.push(`${r.spongeColor} Sponge`);
-  else if (r.spongeType) tags.push(r.spongeType);
-  if (r.hardness) tags.push(r.hardness);
-
-  const metaString = tags.length > 0 ? ` (${tags.join(' - ')})` : '';
-  return `[${r.brand}] ${r.name}${metaString} — $${r.price || 0}`;
+  return (a.name || '').localeCompare(b.name || '');
 }
 
 function populateDropdowns(prefix) {
@@ -210,13 +401,16 @@ function populateDropdowns(prefix) {
   const fhSel = document.getElementById(`${prefix}-fh`);
   const bhSel = document.getElementById(`${prefix}-bh`);
 
+  if (!bladeSel || !fhSel || !bhSel) return;
+
   bladeSel.innerHTML = catalog.blades.map((b, idx) => 
-    `<option value="${idx}">[${b.brand}] ${b.name} — ${b.type || 'Offensive'} ($${b.price || 0})</option>`
+    `<option value="${idx}">[${b.brand}] ${b.name} (${b.composition || 'Wood'}, ${b.stiffness || 'medium'}) — $${b.price || 0}</option>`
   ).join('');
 
-  const rubberOptions = catalog.rubbers.map((r, idx) => 
-    `<option value="${idx}">${formatRubberLabel(r)}</option>`
-  ).join('');
+  const rubberOptions = catalog.rubbers.map((r, idx) => {
+    const hardnessStr = r.spongeHardness ? `${r.spongeHardness}°` : (r.hardness || '-');
+    return `<option value="${idx}">[${r.brand}] ${r.name} (${r.topsheetType || 'tensor'}, ${hardnessStr}) — $${r.price || 0}</option>`;
+  }).join('');
 
   fhSel.innerHTML = rubberOptions;
   bhSel.innerHTML = rubberOptions;
@@ -224,276 +418,16 @@ function populateDropdowns(prefix) {
   if (prefix === 'r2' && catalog.rubbers.length > 1) {
     fhSel.selectedIndex = 1;
   }
-
-  updateHandleOptions(prefix);
-}
-
-function updateHandleOptions(prefix) {
-  const bladeIdx = document.getElementById(`${prefix}-blade`).value;
-  const handleSel = document.getElementById(`${prefix}-handle`);
-  const blade = catalog.blades[bladeIdx] || {};
-
-  const handles = (blade.handles && blade.handles.length > 0) ? blade.handles : ["FL", "ST", "CS"];
-  handleSel.innerHTML = handles.map(h => `<option value="${h}">${h}</option>`).join('');
 }
 
 function bindEvents(prefix) {
-  document.getElementById(`${prefix}-blade`).addEventListener('change', () => {
-    updateHandleOptions(prefix);
-    updateSummary(prefix);
-  });
+  const bladeSel = document.getElementById(`${prefix}-blade`);
+  const fhSel = document.getElementById(`${prefix}-fh`);
+  const bhSel = document.getElementById(`${prefix}-bh`);
 
-  document.getElementById(`${prefix}-fh`).addEventListener('change', () => updateSummary(prefix));
-  document.getElementById(`${prefix}-bh`).addEventListener('change', () => updateSummary(prefix));
-}
-
-// 100% ACCURATE REAL-TIME CATALOG FEEL SEARCH
-function applyFeelPreset(feelType) {
-  if (catalog.blades.length === 0 || catalog.rubbers.length === 0) return;
-
-  const getIdxByExtreme = (array, selector, mode = 'max') => {
-    let bestIdx = 0;
-    let bestVal = selector(array[0]);
-
-    for (let i = 1; i < array.length; i++) {
-      const val = selector(array[i]);
-      if (mode === 'max' ? val > bestVal : val < bestVal) {
-        bestVal = val;
-        bestIdx = i;
-      }
-    }
-    return bestIdx;
-  };
-
-  let bIdx = 0;
-  let fhIdx = 0;
-  let bhIdx = 0;
-
-  switch (feelType) {
-    case 'cheapest':
-      bIdx = getIdxByExtreme(catalog.blades, b => b.price || 0, 'min');
-      fhIdx = getIdxByExtreme(catalog.rubbers, r => r.price || 0, 'min');
-      bhIdx = fhIdx;
-      break;
-
-    case 'expensive':
-      bIdx = getIdxByExtreme(catalog.blades, b => b.price || 0, 'max');
-      fhIdx = getIdxByExtreme(catalog.rubbers, r => r.price || 0, 'max');
-      bhIdx = fhIdx;
-      break;
-
-    case 'max-control': // Most Slow (Max Control)
-      bIdx = getIdxByExtreme(catalog.blades, b => b.control || 0, 'max');
-      fhIdx = getIdxByExtreme(catalog.rubbers, r => r.control || 0, 'max');
-      bhIdx = fhIdx;
-      break;
-
-    case 'max-speed': // Most Fast / Power
-      bIdx = getIdxByExtreme(catalog.blades, b => b.speed || 0, 'max');
-      fhIdx = getIdxByExtreme(catalog.rubbers, r => r.speed || 0, 'max');
-      bhIdx = fhIdx;
-      break;
-
-    case 'max-spin':
-      bIdx = getIdxByExtreme(catalog.blades, b => b.speed || 0, 'max');
-      fhIdx = getIdxByExtreme(catalog.rubbers, r => r.spin || 0, 'max');
-      bhIdx = fhIdx;
-      break;
-
-    case 'lightest':
-      bIdx = getIdxByExtreme(catalog.blades, b => b.weight || 85, 'min');
-      fhIdx = getIdxByExtreme(catalog.rubbers, r => getRubberWeight(r), 'min');
-      bhIdx = fhIdx;
-      break;
-
-    case 'heaviest':
-      bIdx = getIdxByExtreme(catalog.blades, b => b.weight || 85, 'max');
-      fhIdx = getIdxByExtreme(catalog.rubbers, r => getRubberWeight(r), 'max');
-      bhIdx = fhIdx;
-      break;
-
-    case 'hardest':
-      bIdx = getIdxByExtreme(catalog.blades, b => b.speed || 0, 'max');
-      fhIdx = getIdxByExtreme(catalog.rubbers, r => parseHardnessValue(r), 'max');
-      bhIdx = fhIdx;
-      break;
-
-    case 'softest':
-      bIdx = getIdxByExtreme(catalog.blades, b => b.control || 0, 'max');
-      fhIdx = getIdxByExtreme(catalog.rubbers, r => parseHardnessValue(r), 'min');
-      bhIdx = fhIdx;
-      break;
-
-    case 'best-value':
-      bIdx = getIdxByExtreme(catalog.blades, b => ((b.speed || 0) + (b.control || 0)) / Math.max(1, b.price || 1), 'max');
-      fhIdx = getIdxByExtreme(catalog.rubbers, r => ((r.speed || 0) + (r.spin || 0) + (r.control || 0)) / Math.max(1, r.price || 1), 'max');
-      bhIdx = fhIdx;
-      break;
-  }
-
-  // Apply choices to Racket Setup #1
-  document.getElementById('r1-blade').value = bIdx;
-  document.getElementById('r1-fh').value = fhIdx;
-  document.getElementById('r1-bh').value = bhIdx;
-
-  updateHandleOptions('r1');
-  updateSummary('r1');
-  closeFeelModal();
-}
-
-function openFeelModal() {
-  document.getElementById('feelModal').classList.remove('hidden');
-}
-
-function closeFeelModal() {
-  document.getElementById('feelModal').classList.add('hidden');
-}
-
-function detectCategories(blade, fh, bh) {
-  const bladeText = `${blade.brand || ''} ${blade.name || ''} ${blade.type || ''}`.toLowerCase();
-  const fhText = `${fh.brand || ''} ${fh.name || ''} ${fh.version || ''}`.toLowerCase();
-  const bhText = `${bh.brand || ''} ${bh.name || ''} ${bh.version || ''}`.toLowerCase();
-
-  let bladeCat = "outer";
-  if (bladeText.includes("inner") || bladeText.includes("layer")) bladeCat = "inner";
-  else if (bladeText.includes("allwood") || bladeText.includes("5-ply") || bladeText.includes("7-ply")) bladeCat = "allwood";
-  else if (bladeText.includes("def") || bladeText.includes("defensive")) bladeCat = "defensive";
-
-  const classifyRubber = (text) => {
-    if (text.includes("pips") || text.includes("short") || text.includes("long")) return "pips";
-    if (text.includes("sticky") || text.includes("tacky") || text.includes("chinese") || text.includes("hurricane")) return "tacky";
-    if (text.includes("hybrid") || text.includes("dignics 09c") || text.includes("k3")) return "hybrid";
-    return "tensor";
-  };
-
-  const fhCat = classifyRubber(fhText);
-  const bhCat = classifyRubber(bhText);
-
-  let rubberCat = fhCat;
-  if (fhCat === "pips" || bhCat === "pips") rubberCat = "pips";
-  else if (fhCat === "tacky" || bhCat === "tacky") rubberCat = "tacky";
-
-  return { bladeCat, fhCat, bhCat, rubberCat };
-}
-
-function findSimilarPros(blade, fh, bh) {
-  const { bladeCat, fhCat, bhCat, rubberCat } = detectCategories(blade, fh, bh);
-
-  const calculatedSpeed = Math.round(((blade.speed || 0) * 0.5) + ((fh.speed || 0) * 0.25) + ((bh.speed || 0) * 0.25));
-  const calculatedControl = Math.round(((blade.control || 0) * 0.4) + ((fh.control || 0) * 0.3) + ((bh.control || 0) * 0.3));
-
-  const scoredPros = PRO_PROFILES.map(pro => {
-    let score = 0;
-    const proBrand = pro.brand.toLowerCase();
-
-    if ((blade.brand || '').toLowerCase() === proBrand) score += 12;
-    if ((fh.brand || '').toLowerCase() === proBrand || (bh.brand || '').toLowerCase() === proBrand) score += 8;
-
-    if (bladeCat === pro.bladeCategory) score += 25;
-    if (fhCat === pro.rubberCategory) score += 15;
-    if (rubberCat === pro.rubberCategory || bhCat === pro.rubberCategory) score += 15;
-
-    const speedDiff = Math.abs(calculatedSpeed - pro.targetSpeed);
-    const controlDiff = Math.abs(calculatedControl - pro.targetControl);
-    score += Math.max(0, 25 - (speedDiff + controlDiff));
-
-    return { ...pro, score };
-  });
-
-  scoredPros.sort((a, b) => b.score - a.score);
-  return scoredPros.slice(0, 2).map(p => `${p.name} (${p.style})`);
-}
-
-function updateSummary(prefix) {
-  const bladeIdx = document.getElementById(`${prefix}-blade`).value;
-  const fhIdx = document.getElementById(`${prefix}-fh`).value;
-  const bhIdx = document.getElementById(`${prefix}-bh`).value;
-
-  const blade = catalog.blades[bladeIdx] || { price: 0, weight: 85, speed: 0, control: 0 };
-  const fh = catalog.rubbers[fhIdx] || { price: 0, speed: 0, control: 0, spin: 0, hardness: '-' };
-  const bh = catalog.rubbers[bhIdx] || { price: 0, speed: 0, control: 0, spin: 0, hardness: '-' };
-
-  const totalPrice = (blade.price || 0) + (fh.price || 0) + (bh.price || 0);
-  const totalWeight = calculateTotalWeight(blade, fh, bh);
-
-  const calculatedSpeed = Math.round(((blade.speed || 0) * 0.5) + ((fh.speed || 0) * 0.25) + ((bh.speed || 0) * 0.25));
-  const calculatedControl = Math.round(((blade.control || 0) * 0.4) + ((fh.control || 0) * 0.3) + ((bh.control || 0) * 0.3));
-  const calculatedSpin = Math.round(((fh.spin || 0) + (bh.spin || 0)) / 2);
-
-  document.getElementById(`${prefix}-price`).textContent = `$${totalPrice}`;
-  document.getElementById(`${prefix}-weight`).textContent = `${totalWeight}g`;
-  document.getElementById(`${prefix}-speed`).textContent = `${calculatedSpeed} / 100`;
-  document.getElementById(`${prefix}-control`).textContent = `${calculatedControl} / 100`;
-  document.getElementById(`${prefix}-spin`).textContent = `${calculatedSpin} / 100`;
-  document.getElementById(`${prefix}-hardness`).textContent = `${fh.hardness || '-'} / ${bh.hardness || '-'}`;
-
-  const matchedPros = findSimilarPros(blade, fh, bh);
-  document.getElementById(`${prefix}-pros`).innerHTML = matchedPros.map(p => `<span class="pro-tag">${p}</span>`).join('');
-
-  if (isCompareActive) {
-    updateComparisonSummary();
-  }
-}
-
-function updateComparisonSummary() {
-  const getData = (prefix) => {
-    const blade = catalog.blades[document.getElementById(`${prefix}-blade`).value] || {};
-    const fh = catalog.rubbers[document.getElementById(`${prefix}-fh`).value] || {};
-    const bh = catalog.rubbers[document.getElementById(`${prefix}-bh`).value] || {};
-
-    return {
-      price: (blade.price || 0) + (fh.price || 0) + (bh.price || 0),
-      weight: calculateTotalWeight(blade, fh, bh),
-      speed: Math.round(((blade.speed || 0) * 0.5) + ((fh.speed || 0) * 0.25) + ((bh.speed || 0) * 0.25)),
-      control: Math.round(((blade.control || 0) * 0.4) + ((fh.control || 0) * 0.3) + ((bh.control || 0) * 0.3)),
-      spin: Math.round(((fh.spin || 0) + (bh.spin || 0)) / 2)
-    };
-  };
-
-  const r1 = getData('r1');
-  const r2 = getData('r2');
-
-  const diff = (val1, val2, unit = '') => {
-    const d = val1 - val2;
-    if (d === 0) return { winner: "Identical", diffText: "Equal" };
-    if (d > 0) return { winner: `Racket #1`, diffText: `+${d}${unit} higher` };
-    return { winner: `Racket #2`, diffText: `+${Math.abs(d)}${unit} higher` };
-  };
-
-  const priceComp = diff(r1.price, r2.price, '$');
-  const weightComp = diff(r1.weight, r2.weight, 'g');
-  const speedComp = diff(r1.speed, r2.speed, ' pts');
-  const controlComp = diff(r1.control, r2.control, ' pts');
-  const spinComp = diff(r1.spin, r2.spin, ' pts');
-
-  const container = document.getElementById('comparisonMetricsGrid');
-  container.innerHTML = `
-    <div class="comp-card">
-      <div class="comp-label">Cheaper Setup</div>
-      <div class="comp-winner">${priceComp.winner === 'Identical' ? 'Same Cost' : (r1.price < r2.price ? 'Racket #1' : 'Racket #2')}</div>
-      <div class="comp-diff">Difference: $${Math.abs(r1.price - r2.price)}</div>
-    </div>
-    <div class="comp-card">
-      <div class="comp-label">Lighter Setup</div>
-      <div class="comp-winner">${weightComp.winner === 'Identical' ? 'Same Weight' : (r1.weight < r2.weight ? 'Racket #1' : 'Racket #2')}</div>
-      <div class="comp-diff">Difference: ${Math.abs(r1.weight - r2.weight)}g</div>
-    </div>
-    <div class="comp-card">
-      <div class="comp-label">Faster / Higher Power</div>
-      <div class="comp-winner">${speedComp.winner}</div>
-      <div class="comp-diff">${speedComp.diffText}</div>
-    </div>
-    <div class="comp-card">
-      <div class="comp-label">Higher Control</div>
-      <div class="comp-winner">${controlComp.winner}</div>
-      <div class="comp-diff">${controlComp.diffText}</div>
-    </div>
-    <div class="comp-card">
-      <div class="comp-label">Higher Spin Potential</div>
-      <div class="comp-winner">${spinComp.winner}</div>
-      <div class="comp-diff">${spinComp.diffText}</div>
-    </div>
-  `;
+  if (bladeSel) bladeSel.addEventListener('change', () => updateSummary(prefix));
+  if (fhSel) fhSel.addEventListener('change', () => updateSummary(prefix));
+  if (bhSel) bhSel.addEventListener('change', () => updateSummary(prefix));
 }
 
 function toggleCompareMode() {
@@ -504,18 +438,16 @@ function toggleCompareMode() {
   const btn = document.getElementById('compareBtn');
 
   if (isCompareActive) {
-    grid.classList.remove('single-mode');
-    grid.classList.add('compare-mode');
-    card2.classList.remove('hidden');
-    compBox.classList.remove('hidden');
-    btn.textContent = '✕ Close Comparison';
+    if (grid) grid.className = 'compare-mode';
+    if (card2) card2.classList.remove('hidden');
+    if (compBox) compBox.classList.remove('hidden');
+    if (btn) btn.textContent = '✕ Close Comparison';
     updateComparisonSummary();
   } else {
-    grid.classList.remove('compare-mode');
-    grid.classList.add('single-mode');
-    card2.classList.add('hidden');
-    compBox.classList.add('hidden');
-    btn.textContent = '+ Compare Second Racket';
+    if (grid) grid.className = 'single-mode';
+    if (card2) card2.classList.add('hidden');
+    if (compBox) compBox.classList.add('hidden');
+    if (btn) btn.textContent = '+ Compare Second Racket';
   }
 }
 
